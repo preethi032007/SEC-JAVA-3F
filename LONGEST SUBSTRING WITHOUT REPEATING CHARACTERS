@@ -1,0 +1,31 @@
+import java.util.HashMap;
+
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        // Map to store the last seen index of each character
+        HashMap<Character, Integer> map = new HashMap<>();
+        int maxLength = 0;
+        int left = 0; // Left boundary of the sliding window
+
+        for (int right = 0; right < s.length(); right++) {
+            char currentChar = s.charAt(right);
+
+            // If the character is already in the window, shrink the window from the left
+            if (map.containsKey(currentChar)) {
+                left = Math.max(left, map.get(currentChar) + 1);
+            }
+
+            // Update or add the current character's index
+            map.put(currentChar, right);
+
+            // Calculate the max length of the current valid window
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+
+        return maxLength;
+    }
+}
