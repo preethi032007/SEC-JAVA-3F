@@ -1,0 +1,55 @@
+class Solution {
+    public int myAtoi(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        int i = 0;
+        int n = s.length();
+
+        // 1. Skip leading whitespaces
+        while (i < n && s.charAt(i) == ' ') {
+            i++;
+        }
+
+        // If the string is empty or only contains spaces
+        if (i == n) {
+            return 0;
+        }
+
+        // 2. Check signedness
+        int sign = 1;
+        if (s.charAt(i) == '-') {
+            sign = -1;
+            i++;
+        } else if (s.charAt(i) == '+') {
+            i++;
+        }
+
+        // 3. Conversion and Rounding (Overflow/Underflow prevention)
+        int result = 0;
+        int INT_MAX = Integer.MAX_VALUE; // 2147483647
+        int INT_MIN = Integer.MIN_VALUE; // -2147483648
+
+        while (i < n) {
+            char ch = s.charAt(i);
+            
+            // Stop if a non-digit character is encountered
+            if (ch < '0' || ch > '9') {
+                break;
+            }
+
+            int digit = ch - '0';
+
+            // Check overflow/underflow before multiplying by 10
+            if (result > INT_MAX / 10 || (result == INT_MAX / 10 && digit > INT_MAX % 10)) {
+                return sign == 1 ? INT_MAX : INT_MIN;
+            }
+
+            result = result * 10 + digit;
+            i++;
+        }
+
+        return result * sign;
+    }
+}
